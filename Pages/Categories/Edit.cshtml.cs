@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Andriesei_Tudor_Lab2.Data;
 using Andriesei_Tudor_Lab2.Models;
 
-namespace Andriesei_Tudor_Lab2.Pages.Books
+namespace Andriesei_Tudor_Lab2.Pages.Categories
 {
-    public class EditModel : BookCategoriesPageModel
+    public class EditModel : PageModel
     {
         private readonly Andriesei_Tudor_Lab2.Data.Andriesei_Tudor_Lab2Context _context;
 
@@ -21,23 +21,22 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
         }
 
         [BindProperty]
-        public Book Book { get; set; } 
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Category == null)
             {
                 return NotFound();
             }
 
-             Book =  await _context.Book.Include(b=>b.Publisher).Include(b=>b.BookCategories).ThenInclude(b=>b.Category).AsNoTracking().FirstOrDefaultAsync(m=>m.ID==id);
-            if (Book == null)
+            var category =  await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+            if (category == null)
             {
                 return NotFound();
             }
-            
-            ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");            
-                return Page();
+            Category = category;
+            return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -49,7 +48,7 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
                 return Page();
             }
 
-            _context.Attach(Book).State = EntityState.Modified;
+            _context.Attach(Category).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +56,7 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BookExists(Book.ID))
+                if (!CategoryExists(Category.ID))
                 {
                     return NotFound();
                 }
@@ -70,9 +69,9 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
             return RedirectToPage("./Index");
         }
 
-        private bool BookExists(int id)
+        private bool CategoryExists(int id)
         {
-          return _context.Book.Any(e => e.ID == id);
+          return _context.Category.Any(e => e.ID == id);
         }
     }
 }
