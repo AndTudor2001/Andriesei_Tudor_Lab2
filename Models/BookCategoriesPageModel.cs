@@ -8,7 +8,9 @@ namespace Andriesei_Tudor_Lab2.Models
         public void PopulateAssignedCategoryData(Andriesei_Tudor_Lab2Context context,Book book)
         {
             var allCategories = context.Category;
-            var bookCategories = new HashSet<int>(book.BookCategories.Select(c => c.CategoryID));
+            var bookCategories = new HashSet<int>
+                (book.BookCategories.Select(c => c.CategoryID));
+            AssignedCategoryDataList = new List<AssignedCategoryData>();
             foreach (var cat in allCategories)
             {
                 AssignedCategoryDataList.Add(new AssignedCategoryData
