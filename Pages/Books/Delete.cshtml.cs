@@ -29,7 +29,10 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
+            var book = await _context.Book
+                .Include(i=>i.Author)
+                .Include(i=>i.Publisher)
+                .FirstOrDefaultAsync(m => m.ID == id);
 
             if (book == null)
             {
@@ -53,6 +56,7 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
             if (book != null)
             {
                 Book = book;
+                
                 _context.Book.Remove(Book);
                 await _context.SaveChangesAsync();
             }

@@ -26,16 +26,19 @@ namespace Andriesei_Tudor_Lab2.Models
             if (selectedCategories == null)
             {
                 bookToUpdate.BookCategories = new List<BookCategory>();
+                return;
             }
             var selectedCategoriesHS = new HashSet<string>(selectedCategories);
-            var bookCategories = new HashSet<int>(bookToUpdate.BookCategories.Select(c => c.Category.ID));
+            var bookCategories = new HashSet<int>
+                (bookToUpdate.BookCategories.Select(c => c.Category.ID));
             foreach(var cat in context.Category)
             {
                 if (selectedCategoriesHS.Contains(cat.ID.ToString()))
                 {
                     if (!bookCategories.Contains(cat.ID))
                     {
-                        bookToUpdate.BookCategories.Add(new BookCategory
+                        bookToUpdate.BookCategories.Add(
+                            new BookCategory
                         {
                             BookID=bookToUpdate.ID,
                             CategoryID=cat.ID
@@ -46,7 +49,10 @@ namespace Andriesei_Tudor_Lab2.Models
                 {
                     if (bookCategories.Contains(cat.ID))
                     {
-                        BookCategory courseToRemove = bookToUpdate.BookCategories.SingleOrDefault(i => i.CategoryID == cat.ID);
+                        BookCategory courseToRemove 
+                            = bookToUpdate
+                            .BookCategories
+                            .SingleOrDefault(i => i.CategoryID == cat.ID);
                         context.Remove(courseToRemove);
                     }
                 }

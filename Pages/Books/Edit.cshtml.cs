@@ -47,7 +47,7 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
             });
             ViewData["AuthorID"] = new SelectList(authorList, "ID", "FullName");
 
-            ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");            
+            ViewData["PublisherID"] = new SelectList(_context.Publisher, "ID", "PublisherName");            
                 return Page();
         }
 
@@ -56,18 +56,22 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
         public async Task<IActionResult> OnPostAsync(int? id, string[] selectedCategories)
         {
             if (id == null)
+            {
                 return NotFound();
+            }
             var bookToUpdate = await _context.Book
                 .Include(i => i.Publisher)
                 .Include(i => i.BookCategories)
-                .ThenInclude(i => i.Category)
+                    .ThenInclude(i => i.Category)
                 .FirstOrDefaultAsync(s => s.ID == id);
             if (bookToUpdate == null)
+            {
                 return NotFound();
+            }
             if(await TryUpdateModelAsync<Book>(
                 bookToUpdate,
                 "Book",
-                i=>i.Title,i=>i.Author,
+                i=>i.Title,i=>i.AuthorID,
                 i => i.Price, i => i.PublishingDate, i => i.Publisher))
             {
                 UpdateBookCategories(_context, selectedCategories, bookToUpdate);
