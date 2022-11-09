@@ -71,13 +71,14 @@ namespace Andriesei_Tudor_Lab2.Pages.Books
             if(await TryUpdateModelAsync<Book>(
                 bookToUpdate,
                 "Book",
-                i=>i.Title,i=>i.AuthorID,
+                i=>i.Title,i=>i.Author,
                 i => i.Price, i => i.PublishingDate, i => i.Publisher))
             {
                 UpdateBookCategories(_context, selectedCategories, bookToUpdate);
                 await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");
             }
+            
         UpdateBookCategories(_context,selectedCategories, bookToUpdate);
         PopulateAssignedCategoryData(_context,bookToUpdate);
             return Page();
