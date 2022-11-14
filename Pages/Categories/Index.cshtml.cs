@@ -23,22 +23,24 @@ namespace Andriesei_Tudor_Lab2.Pages.Categories
         public CategoryIndexData CategoryData { get; set; }
         public int CategoryID { get; set; }
         public int BookID { get; set; }
-        public async Task OnGetAsync(int? id, int? bookID)
+       
+        public async Task OnGetAsync(int? id,int? bookID)
         {
             CategoryData = new CategoryIndexData();
-            CategoryData.Categories = await _context.Category
-                .Include(i => i.BookCategories)
-                .ThenInclude(i => i.Book)
-                .ThenInclude(c => c.Author)
-                .OrderBy(i => i.CategoryName)
+            CategoryData.Categories=await _context.Category
+                .Include(i=>i.BookCategories)
+                .ThenInclude(i=>i.Book)
+                .ThenInclude(c=>c.Author)
+                .OrderBy(i=>i.CategoryName)
                 .ToListAsync();
-            if (id != null)
+            if(id!=null)
             {
                 CategoryID = id.Value;
-                Category category = CategoryData.Categories
-                .Where(i => i.ID == id.Value).Single();
+                Category category = CategoryData.Categories.
+                    Where(i => i.ID == id.Value).Single();
                 CategoryData.BookCategories = category.BookCategories;
             }
+            
         }
 
     }

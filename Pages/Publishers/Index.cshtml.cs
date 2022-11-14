@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Andriesei_Tudor_Lab2.Data;
 using Andriesei_Tudor_Lab2.Models;
 using Andriesei_Tudor_Lab2.Models.ViewModels;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Andriesei_Tudor_Lab2.Pages.Publishers
 {
@@ -24,14 +25,13 @@ namespace Andriesei_Tudor_Lab2.Pages.Publishers
         public PublisherIndexData PublisherData { get; set; }
         public int PublisherID { get; set; }
         public int BookID { get; set; }
-
-        public async Task OnGetAsync(int? id, int? bookID)
+        public async Task OnGetAsync (int? id, int? bookID)
         {
-            PublisherData=new PublisherIndexData();
+            PublisherData = new PublisherIndexData();
             PublisherData.Publishers = await _context.Publisher
-                .Include(i=>i.Books)
-                .ThenInclude(c=>c.Author)
-                .OrderBy(i=>i.PublisherName)
+                .Include(i => i.Books)
+                .ThenInclude(c => c.Author)
+                .OrderBy(i => i.PublisherName)
                 .ToListAsync();
             if (id != null)
             {
@@ -39,9 +39,10 @@ namespace Andriesei_Tudor_Lab2.Pages.Publishers
                 Publisher publisher = PublisherData.Publishers
                     .Where(i => i.ID == id.Value).Single();
                 PublisherData.Books = publisher.Books;
-
-
             }
         }
+       
+
+        
     }
 }
