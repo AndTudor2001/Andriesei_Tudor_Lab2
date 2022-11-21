@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Andriesei_Tudor_Lab2.Data;
 using Andriesei_Tudor_Lab2.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Andriesei_Tudor_Lab2.Pages.Categories
+    
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly Andriesei_Tudor_Lab2.Data.Andriesei_Tudor_Lab2Context _context;
